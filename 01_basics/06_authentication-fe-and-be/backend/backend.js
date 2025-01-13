@@ -27,7 +27,7 @@ app.post('/signup', function(req, res) {
         users.push({username: username, password: password})
         res.json({msg:'you are singed up'})
     } else {
-        res.send('user already exsists')
+        res.json('user already exsists')
     }
     console.log(users);
 })
@@ -49,7 +49,6 @@ app.post('/signin', function(req, res) {
         }, JWT_SECRET)
         user.token = token
         res.json({
-            msg: 'you are sucesfully singed in',
             token: token,
         })
     } else {

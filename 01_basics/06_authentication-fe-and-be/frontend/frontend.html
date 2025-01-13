@@ -6,6 +6,84 @@
     <title>Document</title>
 </head>
 <body>
+
+    <div class="signup">
+        <input type="text" id="usernameSignup" placeholder="username">
+        <input type="password" id="passwordSignup" placeholder="password">
+        <button onclick="signup()">signup</button>
+    </div>
     
+    <div class="signin">
+        <input type="text" id="usernameSignin" placeholder="username">
+        <input type="password" id="passwordSignin" placeholder="password">
+        <button onclick="signin()">signin</button>
+    </div>
+
+    <div id="userInfo">
+        userInfo:
+    </div>
+
+    <button onclick="logout()">logout</button>
 </body>
+<script>
+    async function signup() {
+    const username = document.getElementById('usernameSignup').value;
+    const password = document.getElementById('passwordSignup').value;
+
+    const response = await fetch('http://localhost:3000/signup', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            username: username,
+            password: password
+        })
+    });
+
+    const data = await response.json();
+    console.log(data);
+}
+
+async function signin() {
+    const username = document.getElementById('usernameSignin').value;
+    const password = document.getElementById('passwordSignin').value;
+
+    const response = await fetch('http://localhost:3000/signin', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            username: username,
+            password: password
+        })
+    });
+
+    const data = await response.json();
+    if (data.token) {
+        localStorage.setItem('token', data.token);
+    } else {
+        console.error('Invalid token from backend');
+    }
+}
+
+async function getUserInfo() {
+    const response = await fetch('http://localhost:3000/me', {
+        method: 'GET',
+        headers: {
+            token: localStorage.getItem('token')
+        }
+    });
+
+    const data = await response.json();
+    document.getElementById('userInfo').innerHTML = `User Info: ${JSON.stringify(data)}`;
+}
+getUserInfo()
+
+function logout() {
+    localStorage.removeItem('token');
+}
+
+</script>
 </html>
