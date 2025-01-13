@@ -78,6 +78,4 @@ app.get('/me', function(req, res) {   // getting user details through token
     }
 })
 
-// CODE FOR JWT(JSON WEB TOKEN) IS IN NOTION NOTES
-
 app.listen(3000);
