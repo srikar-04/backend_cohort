@@ -44,16 +44,18 @@ app.post('/signin', function(req, res) {
     const password = req.body.password;
 
     let isSignedIn = false;
+    let globalToken = '';
 
     users.map(user => {
         if(user.username === username && user.password === password) {
             const token = tokenGenerator()
+            globalToken = token
             user.token = token
             isSignedIn = true
         }
     })
     if(isSignedIn) {
-        res.json({msg:'you are signed in'})
+        res.json({msg:'you are signed in', token:globalToken})
     } else {
         res.send('invalid username or password')
     }
@@ -61,5 +63,15 @@ app.post('/signin', function(req, res) {
     console.log(users);
 })
 
+app.get('/me', function(req, res) {
+    const userToken = req.headers.token
+    const details = [];
+    users.map(user => {
+        if(user.token === userToken) {
+            details.push({username: user.username, password: user.password})
+        }   
+    })
+    res.send(details)
+})
 
 app.listen(3000);
