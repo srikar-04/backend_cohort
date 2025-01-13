@@ -1,3 +1,5 @@
+// LECTURE => 6.2 | Auth And Connecting FE To BE
+
 const express = require('express')
 const jwt = require('jsonwebtoken')
 const JWT_SECRET = 'randomString';
