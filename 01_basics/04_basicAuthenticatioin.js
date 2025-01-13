@@ -63,7 +63,7 @@ app.post('/signin', function(req, res) {
     console.log(users);
 })
 
-app.get('/me', function(req, res) {
+app.get('/me', function(req, res) {   // getting user details through token
     const userToken = req.headers.token
     const details = [];
     users.map(user => {
@@ -71,7 +71,13 @@ app.get('/me', function(req, res) {
             details.push({username: user.username, password: user.password})
         }   
     })
-    res.send(details)
+    if(details.length != 0) {
+        res.send(details)
+    } else {
+        res.send('invalid token')
+    }
 })
+
+// CODE FOR JWT(JSON WEB TOKEN) IS IN NOTION NOTES
 
 app.listen(3000);
