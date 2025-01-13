@@ -2,9 +2,12 @@
 
 const express = require('express')
 const jwt = require('jsonwebtoken')
+const cors = require('cors');
 const JWT_SECRET = 'randomString';
 
 const app = express();
+
+app.use(cors())
 
 app.use(express.json());
 
