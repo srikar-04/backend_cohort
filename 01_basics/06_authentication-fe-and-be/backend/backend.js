@@ -52,7 +52,9 @@ app.post('/signin', function(req, res) {
             token: token,
         })
     } else {
-        res.send('user not found. Incorrect username or password')
+        res.json({
+            msg: 'usernot found, incorrect username or password'
+        })
     }
     console.log(users);
 })
