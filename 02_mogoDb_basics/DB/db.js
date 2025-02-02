@@ -1,6 +1,6 @@
 // connecting to mongodb
 
-import mongoose, { Schema} from "mongoose";
+import mongoose from "mongoose";
 
 const connectDB = async () => {
     try {
