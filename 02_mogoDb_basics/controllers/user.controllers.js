@@ -46,8 +46,8 @@ const registerUser = async (req, res) => {
         })
         console.log(user, "user from registerUser in userController");        
    } catch (error) {
-        console.error('Error while adding user to the database:', error);
-        return res.status(401).json({error: 'Error while adding user to database'})
+        console.error('Error while adding user to the database: bad credentials', error);
+        return res.status(401).json({error: 'Error while adding user to database: bad credentials'})
    }
     
    let createdUser;
