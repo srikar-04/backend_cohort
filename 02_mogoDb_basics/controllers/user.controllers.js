@@ -1,4 +1,4 @@
-import { User } from "../models/User.models";
+import { User } from "../models/User.models.js";
 
 const registerUser = async (req, res) => {
     // 1 -> STEPS FOR REGISTERING USER : 
@@ -9,7 +9,7 @@ const registerUser = async (req, res) => {
     // 6 -> check for user creation
     // 7 -> return response
 
-    // 2
+    // 2 -> getting details from user
     const {username, password, email} = req.body;
     console.log(username, 'name given by user from userController');
 
@@ -67,3 +67,5 @@ const registerUser = async (req, res) => {
 
    return res.status(200).json(createdUser)
 }
+
+export { registerUser }
