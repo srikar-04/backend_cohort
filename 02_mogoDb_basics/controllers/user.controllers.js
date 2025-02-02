@@ -17,55 +17,57 @@ const registerUser = async (req, res) => {
     if (
         [email, username, password].some((field) => field?.trim() === "")
     ) {
-        throw new Error('Enter Valid Credentials') 
+        return res.status(400).json({error: 'enter valid credentials'}) 
     }
 
     // 4 -> checking if user already exsists
    try {
+        console.log('above exsisted user')
         const exsistedUser = await User.findOne({
             $or: [{username}, {email}]
         })
+        console.log(exsistedUser, 'exsisted user value')
 
         if(exsistedUser) {
-            throw new Error('User Already Exsists')
+            return res.status(409).json({ error: 'User already exists' });
         }
    } catch (error) {
-        console.log('error while checking the user');
-        throw new Error('Error while checking the user', error)
+        console.error('Error while checking the user:', error); // ✅ FIXED (Added detailed error logging)
+        return res.status(500).json({ error: 'Error while checking the user' }); // ✅ FIXED (Corrected error handling)
    }
 
     // 5 -> creating a document in database
-    const user = null
+    let user;
    try {
         user = await User.create({
             username,
             password,
             email
         })
-        console.log(user, "user from regusterUser in userController");        
+        console.log(user, "user from registerUser in userController");        
    } catch (error) {
-        console.log('error while adding user to database')
-        throw new Error('Error while adding user to database', error)
+        console.error('Error while adding user to the database:', error);
+        return res.status(401).json({error: 'Error while adding user to database'})
    }
     
-   const createdUser = null
+   let createdUser;
 
    // 6 -> check if user is created in bd
    try {
 
     createdUser = await User.findById(user?._id)
-    log(createdUser, 'created user from registerUser in userController')
+    console.log(createdUser, 'created user from registerUser in userController')
 
     if(!createdUser) {
-        throw new Error('User is not created yet')
+        return res.status(500).json({ error: 'User was not created successfully' });
     }
 
    } catch (error) {
-    console.log('error while checking the created user');
-    throw new Error('Error while checking created user', error)
+        console.error('Error while verifying the created user:', error);
+        return res.status(500).json({ error: 'Error while verifying the created user' });
    }
 
-   return res.status(200).json(createdUser)
+   return res.status(201).json(createdUser)
 }
 
 export { registerUser }

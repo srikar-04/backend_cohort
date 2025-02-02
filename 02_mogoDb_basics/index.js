@@ -12,11 +12,15 @@ const app = express();
 app.use(cors());
 app.use(cookieParser())
 app.use(express.json())
-app.use(express.urlencoded({extended: true, limit: "16kb"}))
+app.use(express.urlencoded({extended: true, limit: "56kb"}))
 app.use(express.static("public"))
 
 // requests
 app.post("/signup", registerUser);
+
+app.get('/', (req, res) => {
+  res.send('you are in the right place')
+})
 
 app.post("/signin", (req, res) => {
   res.send("Hello World");
@@ -34,7 +38,7 @@ app.post("/signiout", (req, res) => {});
 
 connectDB()
 .then(() => {
-  app.listen(process.env.PORT, () => {
+  app.listen(parseInt(process.env.PORT, 10), () => {
     console.log(`Server is running on port ${process.env.PORT}`);
   });
 })
