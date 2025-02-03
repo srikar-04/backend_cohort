@@ -149,4 +149,15 @@ const getUser = async (req, res) => {
     return res.status(201).json({user: req.user, msg: 'user fetched sucesfully'})
 }
 
-export { registerUser, loginUser, getUser }
+const logoutUser = async (req, res) => {
+    const options = {
+        httpOnly: true,
+        secure: true
+    }
+
+    res.status(201)
+    .clearCookie('acessToken', options)
+    .json({msg:'user logged out sucesfully'})
+}
+
+export { registerUser, loginUser, getUser, logoutUser }
