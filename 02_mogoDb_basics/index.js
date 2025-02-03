@@ -4,7 +4,7 @@ dotenv.config();
 import { connectDB } from "./DB/db.js";
 import cookieParser from "cookie-parser";
 import cors from 'cors'
-import { registerUser } from "./controllers/user.controllers.js"
+import { registerUser, loginUser } from "./controllers/user.controllers.js"
 
 const app = express();
 
@@ -22,9 +22,7 @@ app.get('/', (req, res) => {
   res.send('you are in the right place')
 })
 
-app.post("/signin", (req, res) => {
-  res.send("Hello World");
-});
+app.post("/signin", loginUser);
 
 app.post("/todo", (req, res) => {});
 

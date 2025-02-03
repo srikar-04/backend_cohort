@@ -71,7 +71,78 @@ const registerUser = async (req, res) => {
 }
 
 const loginUser = async (req, res) => {
-    
+    // STEPS FOR LOGGING USER
+    // getting user details from frontend
+    // validate user details for email and password
+    // find the user
+    // password check
+    // generate acess token
+    // send cookie
+    // send response
+
+    const {username, password, email} = req.body
+
+    if(!(username?.trim() || email?.trim())) {
+        console.log('username and email are required fields');
+        return res.send(401).json({error: 'username and email are required fields'})
+    }
+
+    let user;
+    try {
+        user = await User.findOne({
+            $or: [{email}, {username}]
+        })
+
+        if(!user) {
+            res.status(500).json({error: 'user is not found in DB'})
+        }
+    } catch (error) {
+        console.log('error while finding the user while logging in');
+        return res.status(401).json({error: 'error while finding the user while logging in'})
+    }
+
+    try {
+        const isPasswordValid = await user.isPasswordCorrect(password)
+        if(!isPasswordValid) {
+            res.status(401).json({error: 'password is invalid'})
+        }
+    } catch (error) {
+        console.log('error while checking the password while logging');
+        res.status(401).json({error: 'error while checking the password while logging'})
+    }
+
+    // getting acess token
+
+    let { acessToken } = null
+    try {
+        acessToken = await user.generateAcessToken()
+    } catch (error) {
+        console.log('error while getting the acess token');
+        return res.status(401).json({error: 'error while getting acess token'})
+    }
+
+    // getting the loggedin user
+    let loggedInUser;
+    try {
+        loggedInUser = await User.findById(user._id)
+        if(!loggedInUser) {
+            return res.status(500).json({error: 'user not logged in yet'})
+        }
+    } catch (error) {
+        console.log('error while finding the user in DB while logging');
+        return res.status(500).json({error: 'error while finding the user in DB while logging'})
+    }
+
+    // sending cookies
+    const options = {
+        httpOnly: true,
+        secure: true,
+    }
+
+    return res
+    .status(201)
+    .cookie('acessToken', acessToken, options )
+    .json({user: loggedInUser,acessToken})
 }
 
-export { registerUser }
+export { registerUser, loginUser }
