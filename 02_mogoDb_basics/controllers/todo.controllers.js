@@ -42,7 +42,7 @@ const deleteTodo = async (req, res) => {
 }
 
 const getTodos = async (req, res) => {
-    let todos
+    let todo
     try {
         todos = await Todo.find({userId: req.user._id});
         if(!todos && !(todos.length>0)) return res.status(500).json({error: 'todos doesnot exsists'})
@@ -55,12 +55,13 @@ const getTodos = async (req, res) => {
 
 const updateTodo = async (req, res) => {
     const userId = req.user._id 
-    const {updatedContent, id} = req.body
+    const {id} = req.params
+    const {updatedContent} = req.body
 
     let updatedTodo
    try {
             updatedTodo = await Todo.findOneAndUpdate(
-            {_id: id,userId},
+            {_id: id, userId},
             { content: updatedContent, completed: false },
             { new: true }
         )
@@ -75,4 +76,29 @@ const updateTodo = async (req, res) => {
    res.status(201).send(updatedTodo)
 }
 
-export { addTodo, deleteTodo, getTodos, updateTodo }
+const toggleTodo = async (req, res) => {
+    const userId = req.user._id;
+    const {id} = req.params
+    const {currentValue} = req.body
+
+    let toggledTodo
+
+    try {
+            toggledTodo = await Todo.findOneAndUpdate(
+                {userId, _id: id},
+                {completed: !currentValue},  // getting value from frontend state
+                { new: true } 
+            )
+            console.log(toggledTodo, 'this is the toggled todo');            
+
+            if(!toggledTodo) {
+                return res.status(500).json({error: 'failed to toglle todo'})
+            }
+    } catch (error) {
+        console.log('error while toggling todo', error);
+        return res.status(500).json({error: 'error while toggling todo'})
+    }
+    res.status(201).send(toggledTodo)
+}
+
+export { addTodo, deleteTodo, getTodos, updateTodo, toggleTodo }
