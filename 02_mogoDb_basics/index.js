@@ -4,7 +4,8 @@ dotenv.config();
 import { connectDB } from "./DB/db.js";
 import cookieParser from "cookie-parser";
 import cors from 'cors'
-import { registerUser, loginUser } from "./controllers/user.controllers.js"
+import { registerUser, loginUser, getUser } from "./controllers/user.controllers.js"
+import {verifyJwt} from './middlewares/authMiddleware.js'
 
 const app = express();
 
@@ -18,9 +19,7 @@ app.use(express.static("public"))
 // requests
 app.post("/signup", registerUser);
 
-app.get('/', (req, res) => {
-  res.send('you are in the right place')
-})
+app.get('/getUser', verifyJwt, getUser)
 
 app.post("/signin", loginUser);
 

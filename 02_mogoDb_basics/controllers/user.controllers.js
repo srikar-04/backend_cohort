@@ -145,4 +145,8 @@ const loginUser = async (req, res) => {
     .json({user: loggedInUser,acessToken})
 }
 
-export { registerUser, loginUser }
+const getUser = async (req, res) => {
+    return res.status(201).json({user: req.user, msg: 'user fetched sucesfully'})
+}
+
+export { registerUser, loginUser, getUser }
