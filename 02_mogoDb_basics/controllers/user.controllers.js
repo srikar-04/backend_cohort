@@ -113,7 +113,7 @@ const loginUser = async (req, res) => {
 
     // getting acess token
 
-    let { acessToken } = null
+    let acessToken;
     try {
         acessToken = await user.generateAcessToken()
     } catch (error) {
