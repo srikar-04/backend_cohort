@@ -53,6 +53,26 @@ const getTodos = async (req, res) => {
     return res.status(201).send(todos)
 }
 
+const updateTodo = async (req, res) => {
+    const userId = req.user._id 
+    const {updatedContent, id} = req.body
 
+    let updatedTodo
+   try {
+            updatedTodo = await Todo.findOneAndUpdate(
+            {_id: id,userId},
+            { content: updatedContent, completed: false },
+            { new: true }
+        )
+        console.log(updatedTodo, 'this is the updated todo');
+        if(!updatedTodo) {
+            return res.status(500).json({error: 'failed to update todo'})
+        }
+   } catch (error) {
+        console.log('error while updating todo', error);
+        return res.status(500).json({error: 'error while updating todo'})
+   }
+   res.status(201).send(updatedTodo)
+}
 
-export { addTodo, deleteTodo, getTodos }
+export { addTodo, deleteTodo, getTodos, updateTodo }
