@@ -23,7 +23,7 @@ const addTodo = async (req, res) => {
 
 const deleteTodo = async (req, res) => {
     const userId = req.user._id
-    const {id} = req.body
+    const {id} = req.params
     console.log(id, 'this is todoId from body');
     console.log(userId, 'this is userid from db');
 

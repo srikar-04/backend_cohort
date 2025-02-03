@@ -28,7 +28,7 @@ app.post('/logout', verifyJwt, logoutUser)
 
 app.post("/todos/addTodo", verifyJwt, addTodo);
 
-app.delete("/todos/deleteTodo", verifyJwt, deleteTodo);
+app.delete("/todos/deleteTodo/:id", verifyJwt, deleteTodo);
 
 app.get("/todos/getTodo", verifyJwt, getTodos);
 
