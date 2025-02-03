@@ -5,7 +5,7 @@ import { connectDB } from "./DB/db.js";
 import cookieParser from "cookie-parser";
 import cors from 'cors'
 import { registerUser, loginUser, getUser, logoutUser } from "./controllers/user.controllers.js"
-import { addTodo } from './controllers/todo.controllers.js'
+import { addTodo, deleteTodo, getTodos } from './controllers/todo.controllers.js'
 import {verifyJwt} from './middlewares/authMiddleware.js'
 
 const app = express();
@@ -28,9 +28,9 @@ app.post('/logout', verifyJwt, logoutUser)
 
 app.post("/todos/addTodo", verifyJwt, addTodo);
 
-app.get("/todos", (req, res) => {
-  res.send('in the get todo section')
-});
+app.delete("/todos/deleteTodo", verifyJwt, deleteTodo);
+
+app.get("/todos/getTodo", verifyJwt, getTodos);
 
 app.post("/signiout", (req, res) => {});
 

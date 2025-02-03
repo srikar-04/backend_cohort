@@ -21,8 +21,38 @@ const addTodo = async (req, res) => {
     return res.status(201).json({todo})
 }
 
-// const deleteTodo = async (req, res) => {
-//     const id = req.user._id
-// }
+const deleteTodo = async (req, res) => {
+    const userId = req.user._id
+    const {id} = req.body
+    console.log(id, 'this is todoId from body');
+    console.log(userId, 'this is userid from db');
 
-export { addTodo }
+    try {
+        const deletedTodo = await Todo.findOneAndDelete({_id: id, userId})
+
+        if(!deletedTodo) {
+            return res.status(401).json({error: 'todo doesnot exsists'})
+        }
+    } catch (error) {
+        console.log('error while deleting todo', error);
+        return res.status(401).json({error: 'error while deleting todo'})
+    }
+
+    res.status(201).json({msg: 'sucesfully deleted todo'})
+}
+
+const getTodos = async (req, res) => {
+    let todos
+    try {
+        todos = await Todo.find({userId: req.user._id});
+        if(!todos && !(todos.length>0)) return res.status(500).json({error: 'todos doesnot exsists'})
+    } catch (error) {
+        console.log('error while getting fetching todos', error);
+        return res.status(401).json({error: 'error while fetching todos'})
+    }
+    return res.status(201).send(todos)
+}
+
+
+
+export { addTodo, deleteTodo, getTodos }
