@@ -5,7 +5,7 @@ const todoSchema = new Schema({
     completed: {
         type: Boolean
     },
-    todo: {
+    content: {
         type: String
     },
     userId: {
