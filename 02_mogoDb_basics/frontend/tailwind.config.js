@@ -7,6 +7,9 @@ export default {
   ],
   theme: {
   	extend: {
+		fontFamily: {
+			sans: ['Inter', 'sans-serif'], // Add Inter font to sans
+		  },
 		animation: {
 			spotlight: "spotlight 2s ease .75s 1 forwards",
 		  },
