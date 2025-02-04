@@ -3,7 +3,7 @@ import { FiGithub } from "react-icons/fi";
 
 function Header() {
   return (
-    <div className="border flex items-center justify-between px-7 py-5 text-white">
+    <div className="border-2 border-b-zinc-800 border-t-0 border-x-0 flex items-center justify-between px-7 py-5 text-white">
       {/* heading */}
       <div className="text-3xl font-[700] font-roboto">
         <h1>Not a normal Todo</h1>
