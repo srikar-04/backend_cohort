@@ -1,3 +1,5 @@
+import dotenv from 'dotenv'
+dotenv.config()
 import mongoose from 'mongoose'
 
 export default async function connectDB(): Promise<void> {
@@ -5,7 +7,10 @@ export default async function connectDB(): Promise<void> {
     {
 
         const MONGO_URI = process.env.MONGODB_URI;
-        const MONGO_DB_NAME = process.env.MONGODB_DB_NAME;
+        const MONGO_DB_NAME = process.env.MONGO_DB_NAME;
+
+        // console.log('MONGO_URI', MONGO_URI)
+        // console.log('MONGO_DB_NAME', MONGO_DB_NAME)
 
         if (!MONGO_URI || !MONGO_DB_NAME) {
             throw new Error("Missing MONGODB_URI or MONGODB_DB_NAME in environment variables");

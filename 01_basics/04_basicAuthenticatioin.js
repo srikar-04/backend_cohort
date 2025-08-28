@@ -66,7 +66,7 @@ app.post('/signin', function(req, res) {
 })
 
 app.get('/me', function(req, res) {   // getting user details through token
-    const userToken = req.headers.token
+    const userToken = req.headers.token  // add the token in postam while sending the request
     const details = [];
     users.map(user => {
         if(user.token === userToken) {
