@@ -10,6 +10,7 @@ const io = new Server(httpServer, {
 
 io.on('connection', (socket) => {
     console.log('a new websocket connection is eshtablished ', socket.id)
+    console.log('these are the rooms : ', socket.rooms)
 
     socket.on('chat', (payload) => {
         console.log('this is payload : ', payload)
