@@ -1,3 +1,14 @@
-console.log('hello world')
+import { Client } from 'pg'
 
-console.log('hello world again')
+const pgClient = new Client("postgresql://postgres:mysecretpassword@localhost:5432/postgres?sslmode=disable")
+
+
+async function main() {
+    await pgClient.connect()
+
+    const response = await pgClient.query('SELECT * FROM users;')
+
+    console.log(response.rows)
+}
+
+main()
