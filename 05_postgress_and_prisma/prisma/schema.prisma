@@ -20,7 +20,7 @@ model Chat {
   title       String
   user_id     Int
   created_at  DateTime @default(now())  
-  user        User     @relation(fields: [user_id], references: [id])
+  user        User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
   documents   Document[]
 }
 
@@ -29,5 +29,5 @@ model Document {
   name        String
   created_at  DateTime @default(now())
   chat_id     Int
-  chat        Chat    @relation(fields: [chat_id], references: [id])
+  chat        Chat    @relation(fields: [chat_id], references: [id], onDelete: Cascade)
 }
