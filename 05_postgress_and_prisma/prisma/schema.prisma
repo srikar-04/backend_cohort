@@ -12,16 +12,22 @@ model User {
   email       String   @unique
   name        String
   created_at  DateTime @default(now())
+  chats       Chat[]
 }
 
 model Chat {
   id          Int      @id @default(autoincrement())
-  name        String
+  title       String
+  user_id     Int
   created_at  DateTime @default(now())  
+  user        User     @relation(fields: [user_id], references: [id])
+  documents   Document[]
 }
 
 model Document {
   id          Int     @id @default(autoincrement())
   name        String
   created_at  DateTime @default(now())
+  chat_id     Int
+  chat        Chat    @relation(fields: [chat_id], references: [id])
 }
