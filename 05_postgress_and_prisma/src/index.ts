@@ -31,6 +31,7 @@ import dotenv from 'dotenv'
 dotenv.config()
 import { PrismaClient } from './generated/prisma/client.js'
 import { PrismaPg } from '@prisma/adapter-pg'
+import express from 'express'
 
 const connectionString = process.env.DATABASE_URL
 
@@ -65,4 +66,57 @@ async function orm() {
     }
 }
 
-orm()
+// orm()
+
+// CREATING A SIMPLE EXPRESS APPLICATION ALONG WITH PRISMA
+
+const app  = express()
+app.use(express.json())
+
+app.get('/users', async (req, res, next) => {
+    const users = await client.user.findMany()
+
+    res.json({
+        success: true,
+        users
+    })
+})
+
+app.post('/create-user', async (req, res, next) => {
+    const name = req.body.name
+    const email = req.body.email
+
+    if(!name || !email) {
+        return res.json({
+            success: false,
+            error: 'cannot find name or email'
+        })
+    }
+
+    const userCreation = await client.user.create({
+        data: {
+            name: name,
+            email: email
+        }
+    })
+
+    console.log('created user : ', userCreation)
+
+    if(!userCreation) {
+        return res.json({
+            success: false,
+            error: 'failed to create user'
+        })
+    }
+
+    res.json({
+        success: true,
+        message: `succesfully created user with ${userCreation.name}`
+    })
+
+})
+
+
+app.listen(3000, () => {
+    console.log('app is listening on port 3000')
+})
