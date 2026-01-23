@@ -204,6 +204,11 @@ app.get('/user-with-chats/:id', async (req, res, next) => {
         },
         include: {
             chats: true,
+        },
+        omit: {
+            name: true,
+            id: true,
+            created_at: true
         }
     })
 
