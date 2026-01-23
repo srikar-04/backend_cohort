@@ -82,6 +82,36 @@ app.get('/users', async (req, res, next) => {
     })
 })
 
+// getting user with specific id
+app.get('/user/:id', async (req, res, next) => {
+    const userId = req.params.id
+
+    try {
+        const user = await client.user.findUnique({
+            where: {
+                id: Number(userId)
+            }
+        })
+
+        if(!user) {
+            return res.json({
+                success: false,
+                error: "user not found"
+            })
+        }
+
+        res.json({
+            success: true,
+            user
+        })
+    } catch (error) {
+        res.json({
+            success: false,
+            error: error
+        })
+    }
+})
+
 app.post('/create-user', async (req, res, next) => {
     const name = req.body.name
     const email = req.body.email
@@ -116,6 +146,79 @@ app.post('/create-user', async (req, res, next) => {
 
 })
 
+app.post('/create-chat/:id', async (req, res, next) => {
+
+    const userId = req.params.id
+
+    const userInfo = await client.user.findUnique({
+        where: {
+            id: Number(userId)
+        }
+    })
+
+    if(!userInfo) {
+        return res.json({
+            success: false,
+            error: `no user found with id ${userId}`
+        })
+    }
+
+    const title = req.body.title
+
+    if(!title) {
+        return res.json({
+            success: false,
+            error: 'cannot find title'
+        })
+    }
+
+    const chatCreation = await client.chat.create({
+        data: {
+            title: title,
+            user: {
+                connect: {id: Number(userId)}
+            }
+        }
+    })
+
+    if(!chatCreation) {
+        return res.json({
+            success: false,
+            error: 'failed to create chat'
+        })
+    }
+
+    res.json({
+        success: true,
+        message: `succesfully created chat with ${chatCreation.title}`
+    })
+})
+
+
+app.get('/user-with-chats/:id', async (req, res, next) => {
+    const userId = req.params.id
+
+    const userWithChats = await client.user.findUnique({
+        where: {
+            id: Number(userId),
+        },
+        include: {
+            chats: true,
+        }
+    })
+
+    if(!userWithChats) {
+        return res.json({
+            success: false,
+            error: `no user with id ${userId}`
+        })
+    }
+
+    res.json({
+        success: true,
+        userWithChats
+    })
+})
 
 app.listen(3000, () => {
     console.log('app is listening on port 3000')
