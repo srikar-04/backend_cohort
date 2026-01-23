@@ -23,4 +23,46 @@ async function main() {
     // console.log(response4.rows)
 }
 
-main()
+// main()
+
+// USING PRISMA
+
+import dotenv from 'dotenv'
+dotenv.config()
+import { PrismaClient } from './generated/prisma/client.js'
+import { PrismaPg } from '@prisma/adapter-pg'
+
+const connectionString = process.env.DATABASE_URL
+
+if (!connectionString) throw new Error("DATABASE_URL is not defined")
+
+const adapter = new PrismaPg({ connectionString })
+const client = new PrismaClient({ adapter })
+
+async function orm() {
+    // const response = await client.user.create({
+    //     data: {
+    //         name: 'shobha',
+    //         email: 'shobha@gmail.com',
+    //     }
+    // })
+
+    // console.log(response)
+
+    const users = await client.user.findMany()
+
+    console.log(users)
+
+    const firstUser = users[0]
+
+    if(firstUser) {
+        await client.chat.create({
+            data: {
+                title: 'chat-1-user-1',
+                user_id: firstUser.id
+            }
+        })
+    }
+}
+
+orm()
