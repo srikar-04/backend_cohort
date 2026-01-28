@@ -31,3 +31,9 @@ model Document {
   chat_id     Int
   chat        Chat    @relation(fields: [chat_id], references: [id], onDelete: Cascade)
 }
+
+model Test {
+  id          Int      @id @default(autoincrement())
+  title      String
+  created_at DateTime @default(now())
+}
